@@ -1,0 +1,8 @@
+.vagrant/
+
+_build/
+blib/
+Build
+MYMETA.*
+
+ubuntu-xenial-16.04-cloudimg-console.log
