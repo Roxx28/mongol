@@ -4,5 +4,9 @@ _build/
 blib/
 Build
 MYMETA.*
+META.*
+MANIFEST
+
+*.tar.gz
 
 ubuntu-xenial-16.04-cloudimg-console.log

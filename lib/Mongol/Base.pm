@@ -20,6 +20,21 @@ package Mongol::Base {
 		)
 	);
 
+	around 'pack' => sub {
+		my $orig = shift();
+		my $self = shift();
+
+		my %args = @_;
+
+		my $result = $self->$orig( %args );
+		delete( $result->{__CLASS__} )
+			if( $args{no_class} );
+
+		return $result;
+	};
+
+	sub serialize { shift()->pack( no_class => 1 ) }
+
 	__PACKAGE__->meta()->make_immutable();
 }
 
@@ -76,15 +91,22 @@ each object which contains the class name.
 
 =head2 pack
 
-	$model->pack()
+	my $hash = $model->pack();
 
 Inherited from L<MooseX::Storage>.
 
 =head2 unpack
 
-	$model->unpack();
+	$model->unpack( $hash );
 
 Inherited from L<MooseX::Storage>.
+
+=head2 serialize
+
+	my $hash = $model->serialize();
+
+Just like B<pack > except it drops the B<__CLASS__> field from the resulting
+hash reference.
 
 =head1 SEE ALSO
 

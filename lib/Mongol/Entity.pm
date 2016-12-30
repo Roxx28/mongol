@@ -6,6 +6,7 @@ package Mongol::Entity {
 	use Mongol::Cursor;
 
 	requires 'pack';
+	requires 'unpack';
 
 	class_has 'collection' => (
 		is => 'rw',
@@ -45,6 +46,12 @@ package Mongol::Entity {
 			undef;
 	}
 
+	sub retrieve {
+		my ( $class, $id ) = @_;
+
+		return $class->find_one( { _id => $id } );
+	}
+
 	sub count {
 		my ( $class, $query, $options ) = @_;
 
@@ -52,16 +59,32 @@ package Mongol::Entity {
 			->count( $query, $options );
 	}
 
-	sub retrieve {
-		my ( $class, $id ) = @_;
-
-		return $class->find_one( { _id => $id } );
-	}
-
 	sub exists {
 		my ( $class, $id ) = @_;
 
 		return $class->count( { _id => $id } );
+	}
+
+	sub update {
+		my ( $class, $filter, $update, $options ) = @_;
+
+		my $result = $class->collection()
+			->update_many( $filter, $update, $options );
+
+		return $result->acknowledged() ?
+			$result->modified_count() :
+			undef;
+	}
+
+	sub delete {
+		my ( $class, $filter ) = @_;
+
+		my $result = $class->collection()
+			->delete_many( $filter );
+
+		return $result->acknowledged() ?
+			$result->deleted_count() :
+			undef;
 	}
 
 	sub save {
@@ -83,7 +106,7 @@ package Mongol::Entity {
 		return $self;
 	}
 
-	sub delete {
+	sub remove {
 		my $self = shift();
 
 		$self->collection()
@@ -126,6 +149,8 @@ Mongol::Entity
 
 =head2 collection
 
+	Person->collection()
+
 =head2 id
 
 	my $id = $model->id();
@@ -153,14 +178,18 @@ Mongol::Entity
 
 	my $bool = Person->exists( $id );
 
+=head2 update
+
+=head2 delete
+
 =head2 save
 
 	$model->age( 35 );
 	$model->save();
 
-=head2 delete
+=head2 remove
 
-	$model->delete();
+	$model->remove();
 
 =head2 drop
 
@@ -173,6 +202,10 @@ Mongol::Entity
 =item *
 
 L<MongoDB::Collection>
+
+=item *
+
+L<MooseX::ClassAttribute>
 
 =back
 
