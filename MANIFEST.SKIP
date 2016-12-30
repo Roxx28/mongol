@@ -68,3 +68,5 @@
 
 ^.vagrant
 ^Vagrantfile$
+
+^.travis.yml$

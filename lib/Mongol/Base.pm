@@ -79,7 +79,7 @@ Mongol::Base - Base class for Mongol entities
 
 =head1 DESCRIPTION
 
-ALl Mongol entitities should inherit from this class since this takes care of the
+All Mongol entitities should inherit from this class since this takes care of the
 serializiation/deserialization of the objects. The serialization is provided by
 L<MooseX::Storage> together with L<MooseX::Storage::Base::SerializedClass>, this
 way we don't have to worry about coercions and defining custom subtypes.

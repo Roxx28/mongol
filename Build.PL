@@ -11,6 +11,18 @@ my $builder = Module::Build->new(
 	dist_author => 'Tudor Marghidanu',
 	dist_abstract => 'Perl Mongo wrapper for Moose objects',
 
+	meta_merge => {
+		resources => {
+			repository => 'https://github.com/marghidanu/mongol'
+		},
+
+		x_contributors => [
+			'Tudor Marghidanu <tudor@marghidanu.com>',
+		],
+	},
+
+	license => 'perl',
+
 	# NOTE: Keep list sorted!
 	requires => {
 		'Class::Load' => undef,

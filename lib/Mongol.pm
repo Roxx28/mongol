@@ -4,7 +4,7 @@ package Mongol {
 
 	use Class::Load qw( load_class );
 
-	our $VERSION = '1.0';
+	our $VERSION = '1.1';
 
 	sub map_entities {
 		my ( $class, $connection, %entities ) = @_;
@@ -39,14 +39,6 @@ Mongol - Basic Mongo ODM for Moose objects
 =head1 DESCRIPTION
 
 L<Mongol> is a basic MongoDB ODM for Moose objects.
-
-=head1 EVENTS
-
-None
-
-=head1 ATTRIBUTES
-
-None
 
 =head1 METHODS
 

@@ -141,15 +141,108 @@ Mongol::Entity
 
 =head1 SYNOPSIS
 
+	package Address {
+		use Moose;
+
+		extends 'Mongol::Base';
+
+		has 'street' => (
+			is => 'ro',
+			isa => 'Str',
+			required => 1
+		);
+
+		has 'number' => (
+			is => 'ro',
+			isa => 'Int',
+			required => 1,
+		);
+
+		__PACKAGE__->meta()->make_immutable();
+	}
+
+	package Person {
+		use Moose;
+
+		extends 'Mongol::Base';
+
+		with 'Mongol::Entity';
+
+		has 'first_name' => (
+			is => 'ro',
+			isa => 'Str',
+			required => 1,
+		);
+
+		has 'last_name' => (
+			is => 'ro',
+			isa => 'Str',
+			required => 1,
+		);
+
+		has 'age' => (
+			is => 'ro',
+			isa => 'Int',
+			required => 1,
+		);
+
+		has 'addresses' => (
+			is => 'ro',
+			isa => 'ArrayRef[Address]',
+			default => sub { [] },
+			traits => [ qw( Array ) ],
+			handles => {
+				add_address => 'push',
+			}
+		);
+
+		__PACKAGE__->meta()->make_immutable();
+	}
+
+	...
+
+	my $person = Person->new(
+		{
+			id => 6161742,
+			first_name => 'John',
+			last_name => 'Doe',
+			age => 30,
+		}
+	);
+
+	my $home = Address->new(
+		{
+			street => 'Main St.',
+			number => 123
+		}
+	);
+
+	# --- Saving
+	$person->add_address( $home );
+	$person->save();
+
+	$person->age( 31 );
+	$person->save();
+
+	# --- Reading
+	my $other = Person->retrive( 616742 );
+
+
+
 =head1 DESCRIPTION
 
 =head1 EVENTS
+
+None at this moment.
 
 =head1 ATTRIBUTES
 
 =head2 collection
 
 	Person->collection()
+
+MongoDB collection class attribute. It contains the L<MongoDB::Collection> associated
+with this entity.
 
 =head2 id
 
@@ -161,6 +254,9 @@ Mongol::Entity
 =head2 find
 
 	my $cursor = Person->find( { age => 30 }, {} );
+
+Executes the mongo query returning a L<Mongol::Cursor> object. Supports the same
+parameters as the B<find> method definded in the L<MongoDB::Collection> package.
 
 =head2 find_one
 
@@ -182,6 +278,8 @@ Mongol::Entity
 
 =head2 delete
 
+	my $count = Person->delete( { age => { '$gt' => 30 } } );
+
 =head2 save
 
 	$model->age( 35 );
@@ -194,6 +292,8 @@ Mongol::Entity
 =head2 drop
 
 	Person->drop();
+
+Drops the MongoDB collection associated to this entity.
 
 =head1 SEE ALSO
 
