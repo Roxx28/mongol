@@ -227,8 +227,6 @@ Mongol::Entity
 	# --- Reading
 	my $other = Person->retrive( 616742 );
 
-
-
 =head1 DESCRIPTION
 
 =head1 EVENTS
