@@ -69,4 +69,8 @@ L<MongoDB>
 
 =back
 
+=head1 LICENSE
+
+Same as perl.
+
 =cut
