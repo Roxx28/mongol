@@ -1,0 +1,13 @@
+language: perl
+
+perl:
+    - "5.22"
+
+service:
+    - mongodb
+
+before_install:
+    - sudo apt-get -qq update
+    - sudo apt-get build-essential
+
+script: "perl Build.PL && ./Build manifest && ./Build installdeps && Build && Build test"
