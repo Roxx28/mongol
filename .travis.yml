@@ -3,7 +3,7 @@ language: perl
 perl:
     - "5.22"
 
-service:
+services:
     - mongodb
 
 before_install:
