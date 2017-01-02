@@ -21,7 +21,7 @@ my $builder = Module::Build->new(
 		],
 	},
 
-	license => 'perl',
+	license => 'artistic_2',
 
 	# NOTE: Keep list sorted!
 	requires => {

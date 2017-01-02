@@ -57,7 +57,7 @@ package main {
 	# This is why I need to check it this way ...
 	can_ok( 'Product', qw(
 			collection
-			find find_one count retrieve exists
+			find find_one count retrieve exists paginate
 			save delete
 			drop
 		)
@@ -99,6 +99,8 @@ package main {
 
 	$product->remove();
 	is( Product->count(), 0, 'Count should be 0' );
+
+	Product->drop();
 
 	done_testing();
 }

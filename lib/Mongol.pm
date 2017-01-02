@@ -162,7 +162,7 @@ for the same collection if you want to map object partially.
 
 =head1 AUTHOR
 
-Tudor Marghidanu <tudor at marghidanu.com>
+Tudor Marghidanu <tudor@marghidanu.com>
 
 =head1 SEE ALSO
 
@@ -180,6 +180,6 @@ L<MongoDB>
 
 =head1 LICENSE
 
-Same as perl.
+This program is free software, you can redistribute it and/or modify it under the terms of the Artistic License version 2.0.
 
 =cut

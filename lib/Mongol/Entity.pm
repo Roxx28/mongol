@@ -4,6 +4,12 @@ package Mongol::Entity {
 	use MooseX::ClassAttribute;
 
 	use Mongol::Cursor;
+	use Mongol::Collection;
+
+	use constant {
+		PAGINATION_DEFAULT_START => 0,
+		PAGINATION_DEFAULT_ROWS => 10,
+	};
 
 	requires 'pack';
 	requires 'unpack';
@@ -65,6 +71,29 @@ package Mongol::Entity {
 		return $class->count( { _id => $id } );
 	}
 
+	sub paginate {
+		my ( $class, $query, $start, $rows, $options ) = @_;
+
+		$options ||=  {};
+		$options->{skip} = $start || PAGINATION_DEFAULT_START;
+		$options->{limit} = $rows || PAGINATION_DEFAULT_ROWS;
+
+		my $total = $class->count( $query );
+		my @entities = $class->find( $query, $options )
+			->all();
+
+		my $collection = Mongol::Collection->new(
+			{
+				entities => \@entities,
+				total => $total,
+				start => $options->{skip},
+				rows => $options->{limit},
+			}
+		);
+
+		return $collection;
+	}
+
 	sub update {
 		my ( $class, $filter, $update, $options ) = @_;
 
@@ -115,7 +144,12 @@ package Mongol::Entity {
 		return $self;
 	}
 
-	sub drop { shift()->collection()->drop() }
+	sub drop {
+		my $self = shift();
+
+		$self->collection()
+			->drop();
+	}
 
 	# --- Private
 	sub _map_to_object {
@@ -229,15 +263,17 @@ Mongol::Entity
 
 =head1 DESCRIPTION
 
-=head1 EVENTS
-
-None at this moment.
+This is the heart and sould of L<Mongol>, when applied to a model will add all the CRUD
+functionlity for MongoDB.
 
 =head1 ATTRIBUTES
 
 =head2 collection
 
-	Person->collection()
+	my $mongo = MongoDB->connect();
+	my $collection = $mongo->get_namespace( 'db.collection' );
+
+	Person->collection( $collection );
 
 MongoDB collection class attribute. It contains the L<MongoDB::Collection> associated
 with this entity.
@@ -260,17 +296,30 @@ parameters as the B<find> method definded in the L<MongoDB::Collection> package.
 
 	my $model = Person->find( { name => 'John Doe' }, {} );
 
+Retrieves a single entity from the collection. For more details see B<find_one>
+on L<MongoDB::Collection>. Returns B<undef> if the value was not found.
+
 =head2 retrieve
 
 	my $model = Person->retrieve( $id );
+
+Retrieves a single entity based on B<id>. Returns B<undef> if the record was not found.
 
 =head2 count
 
 	my $count = Person->count( { age => '30' }, {} );
 
+Counts the objects in collection given the current query.
+
 =head2 exists
 
 	my $bool = Person->exists( $id );
+
+
+
+=head2 paginate
+
+	my $collection = Person->paginate( { age => { '$lt' => 40 } }, {}, 30, 10 );
 
 =head2 update
 
@@ -280,8 +329,11 @@ parameters as the B<find> method definded in the L<MongoDB::Collection> package.
 
 =head2 save
 
-	$model->age( 35 );
-	$model->save();
+	my $person = Person->new( { name => 'John Doe', age => 34 } );
+	$person->save();
+
+	$person->age( 35 );
+	$person->save();
 
 =head2 remove
 

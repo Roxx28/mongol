@@ -72,9 +72,14 @@ Mongol::Base - Base class for Mongol entities
 
 	...
 
-	my $person = Person->new( { name => 'John Doe', age => 30 } );
-	my $data = $person->pack();
+	my $person = Person->new(
+		{
+			name => 'John Doe',
+			age => 30
+		}
+	);
 
+	my $data = $person->pack();
 	my $other_person = Person->unpack( $data );
 
 =head1 DESCRIPTION
@@ -87,23 +92,25 @@ way we don't have to worry about coercions and defining custom subtypes.
 But this comes with a price since L<MooseX::Storage> adds an additional field for
 each object which contains the class name.
 
+L<MongoDB::OID> and L<MongoDB::DBRef> are automatically expanded/collapsed.
+
 =head1 METHODS
 
 =head2 pack
 
-	my $hash = $model->pack();
+	my $hashref = $model->pack();
 
 Inherited from L<MooseX::Storage>.
 
 =head2 unpack
 
-	$model->unpack( $hash );
+	$model->unpack( $hashref );
 
 Inherited from L<MooseX::Storage>.
 
 =head2 serialize
 
-	my $hash = $model->serialize();
+	my $hashref = $model->serialize();
 
 Just like B<pack > except it drops the B<__CLASS__> field from the resulting
 hash reference.
@@ -114,15 +121,7 @@ hash reference.
 
 =item *
 
-L<Moose>
-
-=item *
-
 L<MooseX::Storage>
-
-=item *
-
-L<MooseX::Storage::Engine>
 
 =back
 

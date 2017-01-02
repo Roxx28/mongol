@@ -45,11 +45,7 @@ package main {
 	isa_ok( 'Item', 'Mongol::Base' );
 
 	does_ok( 'Item', 'Mongol::Entity' );
-	has_attribute_ok( 'Item', 'id' );
-	has_attribute_ok( 'Item', 'name' );
-	has_attribute_ok( 'Item', 'number' );
-
-	can_ok( 'Item', qw( save drop find ) );
+	can_ok( 'Item', qw( paginate  drop ) );
 
 	require_ok( 'Mongol' );
 	can_ok( 'Mongol', qw( map_entities ) );
@@ -60,33 +56,29 @@ package main {
 
 	Item->drop();
 
-	foreach my $index ( 1 .. 50 ) {
+	foreach my $index ( 1 .. 20 ) {
 		my $item = Item->new(
 			{
 				id => $index,
 				name => sprintf( 'Item %d', $index ),
-				number => $index % 5,
+				number => ( $index % 2 )
 			}
 		);
 
 		$item->save();
 	}
 
-	my $cursor = Item->find( { number => 0 } );
-	isa_ok( $cursor, 'Mongol::Cursor' );
-	can_ok( $cursor, qw( all has_next next ) );
+	my $collection = Item->paginate( { number => 0 }, 5, 3 );
+	isa_ok( $collection, 'Mongol::Collection' );
+	isa_ok( $collection, 'Mongol::Base' );
+	can_ok( $collection, qw( entities start rows ) );
 
-	my $index = 1;
-	while( my $current = $cursor->next() ) {
-		isa_ok( $current, 'Item' );
+	is( $collection->total(), 10, 'Count ok' );
+	is( $collection->start(), 5, 'Start ok' );
+	is( $collection->rows(), 3, 'Rows ok' );
 
-		my $value = $index++ * 5;
-		is( $current->id(), $value, sprintf( 'Match on value: %d', $value ) );
-	}
-
-	my @items = Item->find( { number => 0 } )
-		->all();
-	is( scalar( @items ), 10, 'Counts match' );
+	my $data = [ map { $_->id() } @{ $collection->entities() } ];
+	is_deeply( $data, [ 12, 14, 16 ], 'Data ok' );
 
 	Item->drop();
 

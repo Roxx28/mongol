@@ -3,14 +3,28 @@ package Mongol::Collection {
 
 	extends 'Mongol::Base';
 
-	has 'items' => (
+	has 'entities' => (
 		is => 'ro',
 		isa => 'ArrayRef[Mongol::Base]',
 		default => sub { [] },
-		traits => [ qw( Array ) ],
-		handles => {
-			all_items => 'elements',
-		}
+	);
+
+	has 'total' => (
+		is => 'ro',
+		isa => 'Int',
+		default => 0,
+	);
+
+	has 'start' => (
+		is => 'ro',
+		isa => 'Int',
+		default => 0,
+	);
+
+	has 'rows' => (
+		is => 'ro',
+		isa => 'Int',
+		default => 10,
 	);
 
 	__PACKAGE__->meta()->make_immutable();
@@ -34,13 +48,22 @@ Mongol::Collection
 
 =head2 items
 
-	my $items = $collection->items()
+	my $items = $collection->entities();
 
-=head1 METHODS
+Returns a list of entities.
 
-=head2 all_items
+=head2 start
 
-	my @items = $collection->all_items()
+	my $start = $collection->start();
+
+
+Pagination start index. Defaults to 0.
+
+=head2 rows
+
+	my $rows = $collection->rows();
+
+Returns the number of rows. Default to 10.
 
 =head1 SEE ALSO
 

@@ -57,6 +57,8 @@ Mongol::Cursor - Object cursor
 
 		extends 'Mongol::Base';
 
+		with 'Mongol::Entity';
+
 		has 'name' => (
 			is => 'ro',
 			isa => 'Str',
@@ -88,13 +90,20 @@ Mongol::Cursor - Object cursor
 
 	my @objects = $cursor->all();
 
+Returns an array of entities.
+
 =head2 has_next
 
 	my $bool = $cursor->has_next();
 
+Checks if there are any more objects in the cursor.
+
 =head2 next
 
 	my $object = $cursor->next();
+
+Returns the next entity in the cursor. If the cursor has no more values B<undef>
+will be returned.
 
 =head1 SEE ALSO
 
