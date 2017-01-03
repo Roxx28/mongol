@@ -3,7 +3,7 @@ package Mongol::Models::Hero {
 
 	extends 'Mongol::Model';
 
-	with 'Mongol::Roles::Basic';
+	with 'Mongol::Roles::Core';
 	with 'Mongol::Roles::Pagination';
 
 	has 'first_name' => (

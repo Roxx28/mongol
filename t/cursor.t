@@ -18,7 +18,7 @@ package main {
 	require_ok( 'Mongol::Models::Hero' );
 	isa_ok( 'Mongol::Models::Hero', 'Mongol::Model' );
 
-	does_ok( 'Mongol::Models::Hero', 'Mongol::Roles::Basic' );
+	does_ok( 'Mongol::Models::Hero', 'Mongol::Roles::Core' );
 	has_attribute_ok( 'Mongol::Models::Hero', 'id' );
 	has_attribute_ok( 'Mongol::Models::Hero', 'first_name' );
 	has_attribute_ok( 'Mongol::Models::Hero', 'last_name' );

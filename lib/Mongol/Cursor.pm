@@ -48,7 +48,7 @@ __END__
 
 =head1 NAME
 
-Mongol::Cursor - Entity cursor
+Mongol::Cursor - Mongol cursor wrapper
 
 =head1 SYNOPSIS
 

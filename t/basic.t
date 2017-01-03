@@ -18,7 +18,7 @@ package main {
 	require_ok( 'Mongol::Models::Hero' );
 	isa_ok( 'Mongol::Models::Hero', 'Mongol::Model' );
 
-	does_ok( 'Mongol::Models::Hero', 'Mongol::Roles::Basic' );
+	does_ok( 'Mongol::Models::Hero', 'Mongol::Roles::Core' );
 	has_attribute_ok( 'Mongol::Models::Hero', 'id' );
 
 	# NOTE: "class_has" does not register an normal attribute.

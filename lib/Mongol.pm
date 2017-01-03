@@ -12,7 +12,7 @@ package Mongol {
 		while( my ( $package, $namespace ) = each( %entities ) ) {
 			load_class( $package );
 
-			if( does_role( $package, 'Mongol::Roles::Basic' ) ) {
+			if( does_role( $package, 'Mongol::Roles::Core' ) ) {
 				$package->collection( $connection->get_namespace( $namespace ) );
 
 				$package->setup()
@@ -32,7 +32,7 @@ __END__
 
 =head1 NAME
 
-Mongol - Basic Mongo ODM for Moose objects
+Mongol - MongoDB ODM for Moose objects
 
 =head1 SYNOPSIS
 

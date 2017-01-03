@@ -1,4 +1,4 @@
-package Mongol::Roles::Basic {
+package Mongol::Roles::Core {
 	use Moose::Role;
 
 	use MooseX::ClassAttribute;
@@ -142,7 +142,7 @@ __END__
 
 =head1 NAME
 
-Mongol::Roles::Basic
+Mongol::Roles::Core - Core MongoDB actions and configuration
 
 =head1 SYNOPSIS
 

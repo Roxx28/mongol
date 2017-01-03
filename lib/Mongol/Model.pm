@@ -53,7 +53,7 @@ __END__
 
 =head1 NAME
 
-Mongol::Model - Base class for Mongol entities
+Mongol::Model - Everything is a model
 
 =head1 SYNOPSIS
 

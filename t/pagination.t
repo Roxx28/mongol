@@ -18,7 +18,7 @@ package main {
 	require_ok( 'Mongol::Models::Hero' );
 	isa_ok( 'Mongol::Models::Hero', 'Mongol::Model' );
 
-	does_ok( 'Mongol::Models::Hero', 'Mongol::Roles::Basic' );
+	does_ok( 'Mongol::Models::Hero', 'Mongol::Roles::Core' );
 	does_ok( 'Mongol::Models::Hero', 'Mongol::Roles::Pagination' );
 	can_ok( 'Mongol::Models::Hero', qw( paginate drop ) );
 
