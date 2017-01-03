@@ -1,11 +1,11 @@
 package Mongol::Collection {
 	use Moose;
 
-	extends 'Mongol::Base';
+	extends 'Mongol::Model';
 
 	has 'entities' => (
 		is => 'ro',
-		isa => 'ArrayRef[Mongol::Base]',
+		isa => 'ArrayRef[Mongol::Model]',
 		default => sub { [] },
 	);
 
@@ -24,7 +24,7 @@ package Mongol::Collection {
 	has 'rows' => (
 		is => 'ro',
 		isa => 'Int',
-		default => 10,
+		default => 0,
 	);
 
 	__PACKAGE__->meta()->make_immutable();
@@ -44,7 +44,7 @@ Mongol::Collection - Result object for pagination
 
 =head1 DESCRIPTION
 
-This object inherits form L<Mongol::Base> so you can use the serializatin/deserialization features.
+This object inherits form L<Mongol::Model> so you can use the serializatin/deserialization features.
 
 =head1 ATTRIBUTES
 
@@ -59,13 +59,9 @@ Returns a list of entities.
 	my $start = $collection->start();
 
 
-Pagination start index. Defaults to 0.
-
 =head2 rows
 
 	my $rows = $collection->rows();
-
-Returns the number of rows. Default to 10.
 
 =head1 SEE ALSO
 
@@ -73,7 +69,7 @@ Returns the number of rows. Default to 10.
 
 =item *
 
-L<Mongol::Base>
+L<Mongol::Model>
 
 =back
 

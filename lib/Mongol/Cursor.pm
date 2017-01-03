@@ -55,9 +55,9 @@ Mongol::Cursor - Entity cursor
 	package Person {
 		use Moose;
 
-		extends 'Mongol::Base';
+		extends 'Mongol::Model';
 
-		with 'Mongol::Entity';
+		with 'Mongol::Roles::Basic';
 
 		has 'name' => (
 			is => 'ro',

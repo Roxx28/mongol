@@ -1,4 +1,4 @@
-package Mongol::Base {
+package Mongol::Model {
 	use Moose;
 
 	use MooseX::Storage;
@@ -15,6 +15,13 @@ package Mongol::Base {
 
 	MooseX::Storage::Engine->add_custom_type_handler(
 		'MongoDB::DBRef' => (
+			expand => sub { shift() },
+			collapse => sub { shift() },
+		)
+	);
+
+	MooseX::Storage::Engine->add_custom_type_handler(
+		'DateTime' => (
 			expand => sub { shift() },
 			collapse => sub { shift() },
 		)
@@ -46,14 +53,14 @@ __END__
 
 =head1 NAME
 
-Mongol::Base - Base class for Mongol entities
+Mongol::Model - Base class for Mongol entities
 
 =head1 SYNOPSIS
 
 	package My::Model::Person {
 		use Moose;
 
-		extends 'Mongol::Base';
+		extends 'Mongol::Model';
 
 		has 'name' => (
 			is => 'ro',

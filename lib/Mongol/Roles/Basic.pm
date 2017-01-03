@@ -1,15 +1,9 @@
-package Mongol::Entity {
+package Mongol::Roles::Basic {
 	use Moose::Role;
 
 	use MooseX::ClassAttribute;
 
 	use Mongol::Cursor;
-	use Mongol::Collection;
-
-	use constant {
-		PAGINATION_DEFAULT_START => 0,
-		PAGINATION_DEFAULT_ROWS => 10,
-	};
 
 	requires 'pack';
 	requires 'unpack';
@@ -69,29 +63,6 @@ package Mongol::Entity {
 		my ( $class, $id ) = @_;
 
 		return $class->count( { _id => $id } );
-	}
-
-	sub paginate {
-		my ( $class, $query, $start, $rows, $options ) = @_;
-
-		$options ||=  {};
-		$options->{skip} = $start || PAGINATION_DEFAULT_START;
-		$options->{limit} = $rows || PAGINATION_DEFAULT_ROWS;
-
-		my $total = $class->count( $query );
-		my @entities = $class->find( $query, $options )
-			->all();
-
-		my $collection = Mongol::Collection->new(
-			{
-				entities => \@entities,
-				total => $total,
-				start => $options->{skip},
-				rows => $options->{limit},
-			}
-		);
-
-		return $collection;
 	}
 
 	sub update {
@@ -171,14 +142,14 @@ __END__
 
 =head1 NAME
 
-Mongol::Entity
+Mongol::Roles::Basic
 
 =head1 SYNOPSIS
 
 	package Address {
 		use Moose;
 
-		extends 'Mongol::Base';
+		extends 'Mongol::Model';
 
 		has 'street' => (
 			is => 'ro',
@@ -198,9 +169,9 @@ Mongol::Entity
 	package Person {
 		use Moose;
 
-		extends 'Mongol::Base';
+		extends 'Mongol::Model';
 
-		with 'Mongol::Entity';
+		with 'Mongol::Roles::Basic';
 
 		has 'first_name' => (
 			is => 'ro',
@@ -314,12 +285,6 @@ Counts the objects in collection given the current query.
 =head2 exists
 
 	my $bool = Person->exists( $id );
-
-
-
-=head2 paginate
-
-	my $collection = Person->paginate( { age => { '$lt' => 40 } }, {}, 30, 10 );
 
 =head2 update
 

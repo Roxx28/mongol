@@ -4,7 +4,7 @@ package Mongol {
 
 	use Class::Load qw( load_class );
 
-	our $VERSION = '1.3';
+	our $VERSION = '2.0';
 
 	sub map_entities {
 		my ( $class, $connection, %entities ) = @_;
@@ -12,8 +12,11 @@ package Mongol {
 		while( my ( $package, $namespace ) = each( %entities ) ) {
 			load_class( $package );
 
-			$package->collection( $connection->get_namespace( $namespace ) )
-				if( does_role( $package, 'Mongol::Entity' ) );
+			if( does_role( $package, 'Mongol::Roles::Basic' ) ) {
+				$package->collection( $connection->get_namespace( $namespace ) );
+
+				# TODO: Run initialization method here ...
+			}
 		}
 	}
 
@@ -35,7 +38,7 @@ Mongol - Basic Mongo ODM for Moose objects
 	package Address {
 		use Moose;
 
-		extends 'Mongol::Base';
+		extends 'Mongol::Model';
 
 		has 'street' => (
 			is => 'ro',
@@ -55,9 +58,9 @@ Mongol - Basic Mongo ODM for Moose objects
 	package Person {
 		use Moose;
 
-		extends 'Mongol::Base';
+		extends 'Mongol::Model';
 
-		with 'Mongol::Entity';
+		with 'Mongol::Roles::Basic';
 
 		has 'first_name' => (
 			is => 'ro',
@@ -157,7 +160,7 @@ L<Mongol> is a basic MongoDB ODM for Moose objects.
 		'My::Moose::Object' => 'database.collection'
 	)
 
-Maps a Moose class with the L<Mongol::Entity> applied to a MongoDB collection. You can add multiple entities
+Maps a Moose class with the L<Mongol::Roles::Basic> applied to a MongoDB collection. You can add multiple entities
 for the same collection if you want to map object partially.
 
 =head1 AUTHOR
