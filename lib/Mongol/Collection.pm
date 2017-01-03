@@ -44,24 +44,14 @@ Mongol::Collection - Result object for pagination
 
 =head1 DESCRIPTION
 
-This object inherits form L<Mongol::Model> so you can use the serializatin/deserialization features.
 
 =head1 ATTRIBUTES
 
 =head2 items
 
-	my $items = $collection->entities();
-
-Returns a list of entities.
-
 =head2 start
 
-	my $start = $collection->start();
-
-
 =head2 rows
-
-	my $rows = $collection->rows();
 
 =head1 SEE ALSO
 

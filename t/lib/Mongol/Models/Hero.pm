@@ -34,6 +34,12 @@ package Mongol::Models::Hero {
 		}
 	);
 
+	sub setup {
+		my $class = shift();
+
+		# TODO: Add indexes here ...
+	}
+
 	sub to_string {
 		my $self = shift();
 

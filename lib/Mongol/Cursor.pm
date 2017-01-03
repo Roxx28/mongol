@@ -1,13 +1,13 @@
 package Mongol::Cursor {
 	use Moose;
 
-	has '_result' => (
+	has 'result' => (
 		is => 'ro',
 		isa => 'MongoDB::QueryResult',
 		required => 1,
 	);
 
-	has '_class' => (
+	has 'class' => (
 		is => 'ro',
 		isa => 'Str',
 		required => 1,
@@ -16,8 +16,8 @@ package Mongol::Cursor {
 	sub all {
 		my $self = shift();
 
-		return map { $self->_class()->_map_to_object( $_ ) }
-			$self->_result()->all();
+		return map { $self->class()->_map_to_object( $_ ) }
+			$self->result()->all();
 	}
 
 	sub has_next {
@@ -30,11 +30,11 @@ package Mongol::Cursor {
 	sub next {
 		my $self = shift();
 
-		my $document = $self->_result()
+		my $document = $self->result()
 			->next();
 
 		return defined( $document ) ?
-			$self->_class()->_map_to_object( $document ) : undef;
+			$self->class()->_map_to_object( $document ) : undef;
 	}
 
 	__PACKAGE__->meta()->make_immutable();
@@ -52,58 +52,21 @@ Mongol::Cursor - Entity cursor
 
 =head1 SYNOPSIS
 
-	package Person {
-		use Moose;
-
-		extends 'Mongol::Model';
-
-		with 'Mongol::Roles::Basic';
-
-		has 'name' => (
-			is => 'ro',
-			isa => 'Str',
-			required => 1,
-		);
-
-		has 'age' => (
-			is => 'ro',
-			isa => 'Int',
-			required => 1,
-		);
-
-		__PACKAGE__->meta()->make_immutable();
-	}
-
-	my $cursor = Person->find( { age => { '$lt' => 30 } } );
-	while( ( my $person = $cursor->next() ) ) {
-		printf( "Name: %s\n", $person->name() );
-		printf( "Age: %d\n", $person->age() );
-	}
-
-	my @people = $cursor->all();
-
 =head1 DESCRIPTION
+
+=head1 ATTRIBUTES
+
+=head2 class
+
+=head2 result
 
 =head1 METHODS
 
 =head2 all
 
-	my @objects = $cursor->all();
-
-Returns an array of entities.
-
 =head2 has_next
 
-	my $bool = $cursor->has_next();
-
-Checks if there are any more objects in the cursor.
-
 =head2 next
-
-	my $object = $cursor->next();
-
-Returns the next entity in the cursor. If the cursor has no more values B<undef>
-will be returned.
 
 =head1 SEE ALSO
 

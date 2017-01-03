@@ -49,38 +49,11 @@ Mongol::Roles::Pagination - Pagination for Mongol models
 
 =head1 SYNOPSIS
 
-	package Person {
-		use Moose;
-
-		extends 'Mongol::Model';
-
-		with 'Mongol::Roles::Basic';
-		with 'Mongol::Roles::Pagination';
-
-		has 'name' => (
-			is => 'ro',
-			isa => 'Str',
-			required => 1,
-		);
-
-		has 'age' => (
-			is => 'ro',
-			isa => 'Int',
-			required => 1,
-		);
-
-		__PACKAGE__->meta()->make_immutable();
-	}
-
-	1;
-
 =head1 DESCRIPTION
 
 =head1 METHODS
 
 =head2 paginate
-
-	my $collection = Person->paginate( { age => 30 }, 15, 10, $options );
 
 =head1 SEE ALSO
 
