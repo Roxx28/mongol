@@ -48,7 +48,7 @@ __END__
 
 =head1 NAME
 
-Mongol::Cursor - Object cursor
+Mongol::Cursor - Entity cursor
 
 =head1 SYNOPSIS
 

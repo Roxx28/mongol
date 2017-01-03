@@ -38,11 +38,13 @@ __END__
 
 =head1 NAME
 
-Mongol::Collection
+Mongol::Collection - Result object for pagination
 
 =head1 SYNOPSIS
 
 =head1 DESCRIPTION
+
+This object inherits form L<Mongol::Base> so you can use the serializatin/deserialization features.
 
 =head1 ATTRIBUTES
 
