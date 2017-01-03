@@ -1,0 +1,13 @@
+=pod
+
+=head1 NAME
+
+Mongol::Cookbook - Mongol tips and tricks
+
+=head1 DESCRIPTION
+
+=head1 AUTHOR
+
+Tudor Marghidanu <tudor@marghidanu.com>
+
+=cut
