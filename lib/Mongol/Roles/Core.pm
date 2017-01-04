@@ -42,7 +42,7 @@ package Mongol::Roles::Core {
 			->find_one( $query, {}, $options );
 
 		return defined( $document ) ?
-			$class->_map_to_object( $document ) :
+			$class->to_object( $document ) :
 			undef;
 	}
 
@@ -123,7 +123,7 @@ package Mongol::Roles::Core {
 	}
 
 	# --- Private
-	sub _map_to_object {
+	sub to_object {
 		my ( $class, $document ) = @_;
 
 		$document->{id} = delete( $document->{_id} );
@@ -175,6 +175,8 @@ Mongol::Roles::Core - Core MongoDB actions and configuration
 =head2 remove
 
 =head2 drop
+
+=head2 to_object
 
 =head1 SEE ALSO
 

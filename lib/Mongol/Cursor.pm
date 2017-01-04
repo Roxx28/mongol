@@ -16,7 +16,7 @@ package Mongol::Cursor {
 	sub all {
 		my $self = shift();
 
-		return map { $self->class()->_map_to_object( $_ ) }
+		return map { $self->class()->to_object( $_ ) }
 			$self->result()->all();
 	}
 
@@ -34,7 +34,7 @@ package Mongol::Cursor {
 			->next();
 
 		return defined( $document ) ?
-			$self->class()->_map_to_object( $document ) : undef;
+			$self->class()->to_object( $document ) : undef;
 	}
 
 	__PACKAGE__->meta()->make_immutable();

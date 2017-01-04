@@ -4,6 +4,14 @@
 
 Mongol::Cookbook - Mongol tips and tricks
 
+=head1 TIPS
+
+=head2 Models base class
+
+=head2 Save/Remove triggers
+
+=head2 Serialize your instances
+
 =head1 DESCRIPTION
 
 =head1 AUTHOR
