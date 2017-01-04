@@ -1,7 +1,7 @@
 package Mongol::Roles::Pagination {
 	use Moose::Role;
 
-	use Mongol::Collection;
+	use Mongol::Set;
 
 	use constant {
 		PAGINATION_DEFAULT_START => 0,
@@ -19,12 +19,12 @@ package Mongol::Roles::Pagination {
 		$options->{limit} = $rows || PAGINATION_DEFAULT_ROWS;
 
 		my $total = $class->count( $query );
-		my @entities = $class->find( $query, $options )
+		my @items = $class->find( $query, $options )
 			->all();
 
-		my $collection = Mongol::Collection->new(
+		my $collection = Mongol::Set->new(
 			{
-				entities => \@entities,
+				items => \@items,
 				total => $total,
 				start => $options->{skip},
 				rows => $options->{limit},
@@ -61,7 +61,7 @@ Mongol::Roles::Pagination - Pagination for Mongol models
 
 =item *
 
-L<Mongol::Collection>
+L<Mongol::Set>
 
 =back
 

@@ -36,11 +36,54 @@ Mongol - MongoDB ODM for Moose objects
 
 =head1 SYNOPSIS
 
+	package Models::Person {
+		use Moose;
+
+		extends 'Mongol::Model';
+
+		with 'Mongol::Roles::Core';
+		with 'Mongol::Roles::Pagination';
+
+		has 'first_name' => (
+			is => 'ro',
+			isa => 'Str',
+			required => 1,
+		);
+
+		has 'last_name' => (
+			is => 'ro',
+			isa => 'Str',
+			required => 1,
+		);
+
+		__PACKAGE__->meta()->make_immutable();
+	}
+
+	package main {
+		...
+
+		use MongoDB;
+
+		use Mongol;
+
+		my $mongo = MongoDB->connect(...);
+
+		Mongol->map_entities( $mongo,
+			'Models::Person' => 'test.people',
+			...
+		);
+
+		...
+	}
+
 =head1 DESCRIPTION
 
 =head1 METHODS
 
 =head2 map_entities
+
+Using a given MongoDB connection will automatically map a model class to a collection.
+After each initialization if exists the B<setup> method on the model will be called.
 
 =head1 AUTHOR
 

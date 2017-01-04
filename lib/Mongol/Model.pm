@@ -57,6 +57,26 @@ Mongol::Model - Everything is a model
 
 =head1 SYNOPSIS
 
+	package Models::Person {
+		use Moose;
+
+		extends 'Mongol::Model';
+
+		has 'first_name' => (
+			is => 'ro',
+			isa => 'Str',
+			required => 1,
+		);
+
+		has 'last_name' => (
+			is => 'ro',
+			isa => 'Str',
+			required => 1,
+		);
+
+		__PACKAGE__->meta()->make_immutable();
+	}
+
 =head1 DESCRIPTION
 
 =head1 METHODS

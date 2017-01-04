@@ -37,7 +37,10 @@ package Mongol::Models::Hero {
 	sub setup {
 		my $class = shift();
 
-		# TODO: Add indexes here ...
+		# Direct access to the undelaying collection object
+		$class->collection()
+			->indexes()
+			->create_one( [ age => 1 ] );
 	}
 
 	sub to_string {

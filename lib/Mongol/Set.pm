@@ -1,9 +1,9 @@
-package Mongol::Collection {
+package Mongol::Set {
 	use Moose;
 
 	extends 'Mongol::Model';
 
-	has 'entities' => (
+	has 'items' => (
 		is => 'ro',
 		isa => 'ArrayRef[Mongol::Model]',
 		default => sub { [] },
@@ -38,7 +38,7 @@ __END__
 
 =head1 NAME
 
-Mongol::Collection - Result object for pagination
+Mongol::Set - Result object for pagination
 
 =head1 SYNOPSIS
 

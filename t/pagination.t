@@ -45,17 +45,17 @@ package main {
 	}
 
 	my $collection = Mongol::Models::Hero->paginate( { age => 0 }, 5, 3 );
-	isa_ok( $collection, 'Mongol::Collection' );
+	isa_ok( $collection, 'Mongol::Set' );
 	isa_ok( $collection, 'Mongol::Model' );
-	can_ok( $collection, qw( entities start rows ) );
+	can_ok( $collection, qw( items start rows ) );
 
 	is( $collection->total(), 10, 'Count ok' );
 	is( $collection->start(), 5, 'Start ok' );
 	is( $collection->rows(), 3, 'Rows ok' );
 
-	my $data = [ 
+	my $data = [
 		map { $_->id() }
-			@{ $collection->entities() }
+			@{ $collection->items() }
 	];
 	is_deeply( $data, [ 30, 35, 40 ], 'Data ok' );
 

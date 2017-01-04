@@ -58,11 +58,18 @@ Mongol::Cursor - Mongol cursor wrapper
 
 =head2 class
 
+The class associated for this cursor. All documents retrieved with this cursor
+will be automatically deserialized using this class definition.
+
 =head2 result
+
+The original L<MongoDB::QueryResult> on which this cursor wraps.
 
 =head1 METHODS
 
 =head2 all
+
+Returns a list of documents.
 
 =head2 has_next
 
