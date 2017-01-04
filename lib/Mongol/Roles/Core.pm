@@ -29,7 +29,7 @@ package Mongol::Roles::Core {
 
 		return Mongol::Cursor->new(
 			{
-				class => $class,
+				type => $class,
 				result => $result,
 			}
 		);

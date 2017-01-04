@@ -1,5 +1,6 @@
 package Mongol::Roles::Relations {
 	use Moose::Role;
+	use Moose::Util;
 
 	use Class::Load qw( load_class );
 

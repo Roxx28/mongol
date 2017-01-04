@@ -15,15 +15,15 @@ package main {
 
 	my $mongo = check_mongod();
 
-	require_ok( 'Mongol::Models::Hero' );
-	isa_ok( 'Mongol::Models::Hero', 'Mongol::Model' );
+	require_ok( 'Mongol::Models::Person' );
+	isa_ok( 'Mongol::Models::Person', 'Mongol::Model' );
 
-	does_ok( 'Mongol::Models::Hero', 'Mongol::Roles::Core' );
-	has_attribute_ok( 'Mongol::Models::Hero', 'id' );
+	does_ok( 'Mongol::Models::Person', 'Mongol::Roles::Core' );
+	has_attribute_ok( 'Mongol::Models::Person', 'id' );
 
 	# NOTE: "class_has" does not register an normal attribute.
 	# This is why I need to check it this way ...
-	can_ok( 'Mongol::Models::Hero', qw(
+	can_ok( 'Mongol::Models::Person', qw(
 			collection
 			find find_one count retrieve exists
 			save delete
@@ -35,41 +35,41 @@ package main {
 	can_ok( 'Mongol', qw( map_entities ) );
 
 	Mongol->map_entities( $mongo,
-		'Mongol::Models::Hero' => 'test.people',
+		'Mongol::Models::Person' => 'test.people',
 	);
 
 	# We start with a clean collection
-	Mongol::Models::Hero->drop();
+	Mongol::Models::Person->drop();
 
-	my $product = Mongol::Models::Hero->new(
+	my $person = Mongol::Models::Person->new(
 		{
 			first_name => 'Bruce',
 			last_name => 'Banner',
 			age => 36,
 		}
 	);
-	isa_ok( $product, 'Mongol::Models::Hero' );
-	has_attribute_ok( $product, 'id' );
-	has_attribute_ok( $product, 'first_name' );
-	has_attribute_ok( $product, 'last_name' );
-	has_attribute_ok( $product, 'age' );
+	isa_ok( $person, 'Mongol::Models::Person' );
+	has_attribute_ok( $person, 'id' );
+	has_attribute_ok( $person, 'first_name' );
+	has_attribute_ok( $person, 'last_name' );
+	has_attribute_ok( $person, 'age' );
 
-	$product->save();
-	isa_ok( $product->id(), 'MongoDB::OID' );
+	$person->save();
+	isa_ok( $person->id(), 'MongoDB::OID' );
 
-	$product->age( 37 );
-	$product->save();
+	$person->age( 37 );
+	$person->save();
 
 	# Two save calls in a row but only one record ...
-	is( Mongol::Models::Hero->count(), 1, 'Count should be 1' );
+	is( Mongol::Models::Person->count(), 1, 'Count should be 1' );
 
-	my $clone = Mongol::Models::Hero->retrieve( $product->id() );
-	is_deeply( $clone, $product, 'Objects match' );
+	my $clone = Mongol::Models::Person->retrieve( $person->id() );
+	is_deeply( $clone, $person, 'Objects match' );
 
-	$product->remove();
-	is( Mongol::Models::Hero->count(), 0, 'Count should be 0' );
+	$person->remove();
+	is( Mongol::Models::Person->count(), 0, 'Count should be 0' );
 
-	Mongol::Models::Hero->drop();
+	Mongol::Models::Person->drop();
 
 	done_testing();
 }

@@ -15,28 +15,28 @@ package main {
 
 	my $mongo = check_mongod();
 
-	require_ok( 'Mongol::Models::Hero' );
-	isa_ok( 'Mongol::Models::Hero', 'Mongol::Model' );
+	require_ok( 'Mongol::Models::Person' );
+	isa_ok( 'Mongol::Models::Person', 'Mongol::Model' );
 
-	does_ok( 'Mongol::Models::Hero', 'Mongol::Roles::Core' );
-	has_attribute_ok( 'Mongol::Models::Hero', 'id' );
-	has_attribute_ok( 'Mongol::Models::Hero', 'first_name' );
-	has_attribute_ok( 'Mongol::Models::Hero', 'last_name' );
-	has_attribute_ok( 'Mongol::Models::Hero', 'age' );
+	does_ok( 'Mongol::Models::Person', 'Mongol::Roles::Core' );
+	has_attribute_ok( 'Mongol::Models::Person', 'id' );
+	has_attribute_ok( 'Mongol::Models::Person', 'first_name' );
+	has_attribute_ok( 'Mongol::Models::Person', 'last_name' );
+	has_attribute_ok( 'Mongol::Models::Person', 'age' );
 
-	can_ok( 'Mongol::Models::Hero', qw( save drop find ) );
+	can_ok( 'Mongol::Models::Person', qw( save drop find ) );
 
 	require_ok( 'Mongol' );
 	can_ok( 'Mongol', qw( map_entities ) );
 
 	Mongol->map_entities( $mongo,
-		'Mongol::Models::Hero' => 'test.people',
+		'Mongol::Models::Person' => 'test.people',
 	);
 
-	Mongol::Models::Hero->drop();
+	Mongol::Models::Person->drop();
 
 	foreach my $index ( 1 .. 50 ) {
-		my $item = Mongol::Models::Hero->new(
+		my $item = Mongol::Models::Person->new(
 			{
 				id => $index,
 				first_name => 'Tony',
@@ -48,23 +48,23 @@ package main {
 		$item->save();
 	}
 
-	my $cursor = Mongol::Models::Hero->find( { age => 0 } );
+	my $cursor = Mongol::Models::Person->find( { age => 0 } );
 	isa_ok( $cursor, 'Mongol::Cursor' );
 	can_ok( $cursor, qw( all has_next next ) );
 
 	my $index = 1;
 	while( my $person = $cursor->next() ) {
-		isa_ok( $person, 'Mongol::Models::Hero' );
+		isa_ok( $person, 'Mongol::Models::Person' );
 
 		my $value = $index++ * 5;
 		is( $person->id(), $value, sprintf( 'Match on value: %d', $value ) );
 	}
 
-	my @people = Mongol::Models::Hero->find( { age => 1 } )
+	my @people = Mongol::Models::Person->find( { age => 1 } )
 		->all();
 	is( scalar( @people ), 10, 'Counts match' );
 
-	Mongol::Models::Hero->drop();
+	Mongol::Models::Person->drop();
 
 	done_testing();
 }

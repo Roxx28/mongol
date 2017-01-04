@@ -7,7 +7,7 @@ package Mongol::Cursor {
 		required => 1,
 	);
 
-	has 'class' => (
+	has 'type' => (
 		is => 'ro',
 		isa => 'Str',
 		required => 1,
@@ -16,7 +16,7 @@ package Mongol::Cursor {
 	sub all {
 		my $self = shift();
 
-		return map { $self->class()->to_object( $_ ) }
+		return map { $self->type()->to_object( $_ ) }
 			$self->result()->all();
 	}
 
@@ -34,7 +34,7 @@ package Mongol::Cursor {
 			->next();
 
 		return defined( $document ) ?
-			$self->class()->to_object( $document ) : undef;
+			$self->type()->to_object( $document ) : undef;
 	}
 
 	__PACKAGE__->meta()->make_immutable();
@@ -56,7 +56,7 @@ Mongol::Cursor - Mongol cursor wrapper
 
 =head1 ATTRIBUTES
 
-=head2 class
+=head2 type
 
 The class associated for this cursor. All documents retrieved with this cursor
 will be automatically deserialized using this class definition.

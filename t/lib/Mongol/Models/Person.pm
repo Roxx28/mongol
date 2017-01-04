@@ -1,10 +1,11 @@
-package Mongol::Models::Hero {
+package Mongol::Models::Person {
 	use Moose;
 
 	extends 'Mongol::Model';
 
 	with 'Mongol::Roles::Core';
 	with 'Mongol::Roles::Pagination';
+	with 'Mongol::Roles::Relations';
 
 	has 'first_name' => (
 		is => 'ro',

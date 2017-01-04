@@ -15,24 +15,24 @@ package main {
 
 	my $mongo = check_mongod();
 
-	require_ok( 'Mongol::Models::Hero' );
-	isa_ok( 'Mongol::Models::Hero', 'Mongol::Model' );
+	require_ok( 'Mongol::Models::Person' );
+	isa_ok( 'Mongol::Models::Person', 'Mongol::Model' );
 
-	does_ok( 'Mongol::Models::Hero', 'Mongol::Roles::Core' );
-	does_ok( 'Mongol::Models::Hero', 'Mongol::Roles::Pagination' );
-	can_ok( 'Mongol::Models::Hero', qw( paginate drop ) );
+	does_ok( 'Mongol::Models::Person', 'Mongol::Roles::Core' );
+	does_ok( 'Mongol::Models::Person', 'Mongol::Roles::Pagination' );
+	can_ok( 'Mongol::Models::Person', qw( paginate drop ) );
 
 	require_ok( 'Mongol' );
 	can_ok( 'Mongol', qw( map_entities ) );
 
 	Mongol->map_entities( $mongo,
-		'Mongol::Models::Hero' => 'test.people',
+		'Mongol::Models::Person' => 'test.people',
 	);
 
-	Mongol::Models::Hero->drop();
+	Mongol::Models::Person->drop();
 
 	foreach my $index ( 1 .. 50 ) {
-		my $item = Mongol::Models::Hero->new(
+		my $item = Mongol::Models::Person->new(
 			{
 				id => $index,
 				first_name => 'Steve',
@@ -44,7 +44,7 @@ package main {
 		$item->save();
 	}
 
-	my $collection = Mongol::Models::Hero->paginate( { age => 0 }, 5, 3 );
+	my $collection = Mongol::Models::Person->paginate( { age => 0 }, 5, 3 );
 	isa_ok( $collection, 'Mongol::Set' );
 	isa_ok( $collection, 'Mongol::Model' );
 	can_ok( $collection, qw( items start rows ) );
@@ -59,7 +59,7 @@ package main {
 	];
 	is_deeply( $data, [ 30, 35, 40 ], 'Data ok' );
 
-	Mongol::Models::Hero->drop();
+	Mongol::Models::Person->drop();
 
 	done_testing();
 }

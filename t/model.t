@@ -28,8 +28,8 @@ package main {
 	can_ok( $address, qw( pack unpack serialize ) );
 
 	# --- Person
-	require_ok( 'Mongol::Models::Hero' );
-	my $person = Mongol::Models::Hero->new(
+	require_ok( 'Mongol::Models::Person' );
+	my $person = Mongol::Models::Person->new(
 		{
 			first_name => 'Peter',
 			last_name => 'Parker',
@@ -37,7 +37,7 @@ package main {
 		}
 	);
 
-	isa_ok( $person, 'Mongol::Models::Hero' );
+	isa_ok( $person, 'Mongol::Models::Person' );
 	has_attribute_ok( $person, 'first_name' );
 	has_attribute_ok( $person, 'last_name' );
 	has_attribute_ok( $person, 'age' );
