@@ -1,41 +1,41 @@
-package Mongol::Roles::Pagination {
-	use Moose::Role;
+package Mongol::Roles::Pagination;
 
-	use Mongol::Set;
+use Moose::Role;
 
-	use constant {
-		PAGINATION_DEFAULT_START => 0,
-		PAGINATION_DEFAULT_ROWS => 10,
-	};
+use Mongol::Set;
 
-	requires 'count';
-	requires 'find';
+use constant {
+	PAGINATION_DEFAULT_START => 0,
+	PAGINATION_DEFAULT_ROWS => 10,
+};
 
-	sub paginate {
-		my ( $class, $query, $start, $rows, $options ) = @_;
+requires 'count';
+requires 'find';
 
-		$options ||=  {};
-		$options->{skip} = $start || PAGINATION_DEFAULT_START;
-		$options->{limit} = $rows || PAGINATION_DEFAULT_ROWS;
+sub paginate {
+	my ( $class, $query, $start, $rows, $options ) = @_;
 
-		my $total = $class->count( $query );
-		my @items = $class->find( $query, $options )
-			->all();
+	$options ||=  {};
+	$options->{skip} = $start || PAGINATION_DEFAULT_START;
+	$options->{limit} = $rows || PAGINATION_DEFAULT_ROWS;
 
-		my $collection = Mongol::Set->new(
-			{
-				items => \@items,
-				total => $total,
-				start => $options->{skip},
-				rows => $options->{limit},
-			}
-		);
+	my $total = $class->count( $query );
+	my @items = $class->find( $query, $options )
+		->all();
 
-		return $collection;
-	}
+	my $collection = Mongol::Set->new(
+		{
+			items => \@items,
+			total => $total,
+			start => $options->{skip},
+			rows => $options->{limit},
+		}
+	);
 
-	no Moose::Role;
+	return $collection;
 }
+
+no Moose::Role;
 
 1;
 

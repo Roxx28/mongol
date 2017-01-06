@@ -1,21 +1,21 @@
-package Mongol::Models::Address {
-	use Moose;
+package Mongol::Models::Address;
 
-	extends 'Mongol::Model';
+use Moose;
 
-	has 'street' => (
-		is => 'ro',
-		isa => 'Str',
-		required => 1,
-	);
+extends 'Mongol::Model';
 
-	has 'number' => (
-		is => 'ro',
-		isa => 'Int',
-		required => 1,
-	);
+has 'street' => (
+	is => 'ro',
+	isa => 'Str',
+	required => 1,
+);
 
-	__PACKAGE__->meta()->make_immutable();
-}
+has 'number' => (
+	is => 'ro',
+	isa => 'Int',
+	required => 1,
+);
+
+__PACKAGE__->meta()->make_immutable();
 
 1;

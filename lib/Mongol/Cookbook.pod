@@ -12,7 +12,7 @@ Mongol::Cookbook - Mongol tips and tricks
 
 =head2 Serialize your instances
 
-=head1 DESCRIPTION
+=head2 Custom ids
 
 =head1 AUTHOR
 

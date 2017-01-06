@@ -1,138 +1,138 @@
-package Mongol::Roles::Core {
-	use Moose::Role;
+package Mongol::Roles::Core;
 
-	use MooseX::ClassAttribute;
+use Moose::Role;
 
-	use Mongol::Cursor;
+use MooseX::ClassAttribute;
 
-	requires 'pack';
-	requires 'unpack';
+use Mongol::Cursor;
 
-	class_has 'collection' => (
-		is => 'rw',
-		isa => 'Maybe[MongoDB::Collection]',
-		default => undef,
-	);
+requires 'pack';
+requires 'unpack';
 
-	has 'id' => (
-		is => 'rw',
-		isa => 'Maybe[MongoDB::OID|Str|Num]',
-		default => undef,
-	);
+class_has 'collection' => (
+	is => 'rw',
+	isa => 'Maybe[MongoDB::Collection]',
+	default => undef,
+);
 
-	sub find {
-		my ( $class, $query, $options ) = @_;
+has 'id' => (
+	is => 'rw',
+	isa => 'Maybe[MongoDB::OID|Str|Num]',
+	default => undef,
+);
 
-		my $result = $class->collection()
-			->find( $query, $options )
-			->result();
+sub find {
+	my ( $class, $query, $options ) = @_;
 
-		return Mongol::Cursor->new(
-			{
-				type => $class,
-				result => $result,
-			}
-		);
-	}
+	my $result = $class->collection()
+		->find( $query, $options )
+		->result();
 
-	sub find_one {
-		my ( $class, $query, $options ) = @_;
-
-		my $document = $class->collection()
-			->find_one( $query, {}, $options );
-
-		return defined( $document ) ?
-			$class->to_object( $document ) :
-			undef;
-	}
-
-	sub retrieve {
-		my ( $class, $id ) = @_;
-
-		return $class->find_one( { _id => $id } );
-	}
-
-	sub count {
-		my ( $class, $query, $options ) = @_;
-
-		return $class->collection()
-			->count( $query, $options );
-	}
-
-	sub exists {
-		my ( $class, $id ) = @_;
-
-		return $class->count( { _id => $id } );
-	}
-
-	sub update {
-		my ( $class, $filter, $update, $options ) = @_;
-
-		my $result = $class->collection()
-			->update_many( $filter, $update, $options );
-
-		return $result->acknowledged() ?
-			$result->modified_count() :
-			undef;
-	}
-
-	sub delete {
-		my ( $class, $filter ) = @_;
-
-		my $result = $class->collection()
-			->delete_many( $filter );
-
-		return $result->acknowledged() ?
-			$result->deleted_count() :
-			undef;
-	}
-
-	sub save {
-		my $self = shift();
-
-		my $document = $self->pack();
-		$document->{_id} = delete( $document->{id} );
-
-		unless( defined( $document->{_id} ) ) {
-			my $result = $self->collection()
-				->insert_one( $document );
-
-			$self->id( $result->inserted_id() );
-		} else {
-			$self->collection()
-				->replace_one( { _id => $self->id() }, $document, { upsert => 1 } );
+	return Mongol::Cursor->new(
+		{
+			type => $class,
+			result => $result,
 		}
-
-		return $self;
-	}
-
-	sub remove {
-		my $self = shift();
-
-		$self->collection()
-			->delete_one( { _id => $self->id() } );
-
-		return $self;
-	}
-
-	sub drop {
-		my $self = shift();
-
-		$self->collection()
-			->drop();
-	}
-
-	# --- Private
-	sub to_object {
-		my ( $class, $document ) = @_;
-
-		$document->{id} = delete( $document->{_id} );
-
-		return $class->unpack( $document );
-	}
-
-	no Moose::Role;
+	);
 }
+
+sub find_one {
+	my ( $class, $query, $options ) = @_;
+
+	my $document = $class->collection()
+		->find_one( $query, {}, $options );
+
+	return defined( $document ) ?
+		$class->to_object( $document ) :
+		undef;
+}
+
+sub retrieve {
+	my ( $class, $id ) = @_;
+
+	return $class->find_one( { _id => $id } );
+}
+
+sub count {
+	my ( $class, $query, $options ) = @_;
+
+	return $class->collection()
+		->count( $query, $options );
+}
+
+sub exists {
+	my ( $class, $id ) = @_;
+
+	return $class->count( { _id => $id } );
+}
+
+sub update {
+	my ( $class, $filter, $update, $options ) = @_;
+
+	my $result = $class->collection()
+		->update_many( $filter, $update, $options );
+
+	return $result->acknowledged() ?
+		$result->modified_count() :
+		undef;
+}
+
+sub delete {
+	my ( $class, $filter ) = @_;
+
+	my $result = $class->collection()
+		->delete_many( $filter );
+
+	return $result->acknowledged() ?
+		$result->deleted_count() :
+		undef;
+}
+
+sub save {
+	my $self = shift();
+
+	my $document = $self->pack();
+	$document->{_id} = delete( $document->{id} );
+
+	unless( defined( $document->{_id} ) ) {
+		my $result = $self->collection()
+			->insert_one( $document );
+
+		$self->id( $result->inserted_id() );
+	} else {
+		$self->collection()
+			->replace_one( { _id => $self->id() }, $document, { upsert => 1 } );
+	}
+
+	return $self;
+}
+
+sub remove {
+	my $self = shift();
+
+	$self->collection()
+		->delete_one( { _id => $self->id() } );
+
+	return $self;
+}
+
+sub drop {
+	my $self = shift();
+
+	$self->collection()
+		->drop();
+}
+
+# --- Private
+sub to_object {
+	my ( $class, $document ) = @_;
+
+	$document->{id} = delete( $document->{_id} );
+
+	return $class->unpack( $document );
+}
+
+no Moose::Role;
 
 1;
 

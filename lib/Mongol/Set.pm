@@ -1,34 +1,34 @@
-package Mongol::Set {
-	use Moose;
+package Mongol::Set;
 
-	extends 'Mongol::Model';
+use Moose;
 
-	has 'items' => (
-		is => 'ro',
-		isa => 'ArrayRef[Mongol::Model]',
-		default => sub { [] },
-	);
+extends 'Mongol::Model';
 
-	has 'total' => (
-		is => 'ro',
-		isa => 'Int',
-		default => 0,
-	);
+has 'items' => (
+	is => 'ro',
+	isa => 'ArrayRef[Mongol::Model]',
+	default => sub { [] },
+);
 
-	has 'start' => (
-		is => 'ro',
-		isa => 'Int',
-		default => 0,
-	);
+has 'total' => (
+	is => 'ro',
+	isa => 'Int',
+	default => 0,
+);
 
-	has 'rows' => (
-		is => 'ro',
-		isa => 'Int',
-		default => 0,
-	);
+has 'start' => (
+	is => 'ro',
+	isa => 'Int',
+	default => 0,
+);
 
-	__PACKAGE__->meta()->make_immutable();
-}
+has 'rows' => (
+	is => 'ro',
+	isa => 'Int',
+	default => 0,
+);
+
+__PACKAGE__->meta()->make_immutable();
 
 1;
 
@@ -43,7 +43,6 @@ Mongol::Set - Result object for pagination
 =head1 SYNOPSIS
 
 =head1 DESCRIPTION
-
 
 =head1 ATTRIBUTES
 

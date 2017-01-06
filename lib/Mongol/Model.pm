@@ -1,49 +1,49 @@
-package Mongol::Model {
-	use Moose;
+package Mongol::Model;
 
-	use MooseX::Storage;
-	use MooseX::Storage::Engine;
+use Moose;
 
-	with Storage( base => 'SerializedClass' );
+use MooseX::Storage;
+use MooseX::Storage::Engine;
 
-	MooseX::Storage::Engine->add_custom_type_handler(
-		'MongoDB::OID' => (
-			expand => sub { shift() },
-			collapse => sub { shift() },
-		)
-	);
+with Storage( base => 'SerializedClass' );
 
-	MooseX::Storage::Engine->add_custom_type_handler(
-		'MongoDB::DBRef' => (
-			expand => sub { shift() },
-			collapse => sub { shift() },
-		)
-	);
+MooseX::Storage::Engine->add_custom_type_handler(
+	'MongoDB::OID' => (
+		expand => sub { shift() },
+		collapse => sub { shift() },
+	)
+);
 
-	MooseX::Storage::Engine->add_custom_type_handler(
-		'DateTime' => (
-			expand => sub { shift() },
-			collapse => sub { shift() },
-		)
-	);
+MooseX::Storage::Engine->add_custom_type_handler(
+	'MongoDB::DBRef' => (
+		expand => sub { shift() },
+		collapse => sub { shift() },
+	)
+);
 
-	around 'pack' => sub {
-		my $orig = shift();
-		my $self = shift();
+MooseX::Storage::Engine->add_custom_type_handler(
+	'DateTime' => (
+		expand => sub { shift() },
+		collapse => sub { shift() },
+	)
+);
 
-		my %args = @_;
+around 'pack' => sub {
+	my $orig = shift();
+	my $self = shift();
 
-		my $result = $self->$orig( %args );
-		delete( $result->{__CLASS__} )
-			if( $args{no_class} );
+	my %args = @_;
 
-		return $result;
-	};
+	my $result = $self->$orig( %args );
+	delete( $result->{__CLASS__} )
+		if( $args{no_class} );
 
-	sub serialize { shift()->pack( no_class => 1 ) }
+	return $result;
+};
 
-	__PACKAGE__->meta()->make_immutable();
-}
+sub serialize { shift()->pack( no_class => 1 ) }
+
+__PACKAGE__->meta()->make_immutable();
 
 1;
 

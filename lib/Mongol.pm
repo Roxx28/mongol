@@ -1,28 +1,28 @@
-package Mongol {
-	use Moose;
-	use Moose::Util qw( does_role );
+package Mongol;
 
-	use Class::Load qw( load_class );
+use Moose;
+use Moose::Util qw( does_role );
 
-	our $VERSION = '2.0';
+use Class::Load qw( load_class );
 
-	sub map_entities {
-		my ( $class, $connection, %entities ) = @_;
+our $VERSION = '2.0';
 
-		while( my ( $package, $namespace ) = each( %entities ) ) {
-			load_class( $package );
+sub map_entities {
+	my ( $class, $connection, %entities ) = @_;
 
-			if( does_role( $package, 'Mongol::Roles::Core' ) ) {
-				$package->collection( $connection->get_namespace( $namespace ) );
+	while( my ( $package, $namespace ) = each( %entities ) ) {
+		load_class( $package );
 
-				$package->setup()
-					if( $package->can( 'setup' ) );
-			}
+		if( does_role( $package, 'Mongol::Roles::Core' ) ) {
+			$package->collection( $connection->get_namespace( $namespace ) );
+
+			$package->setup()
+				if( $package->can( 'setup' ) );
 		}
 	}
-
-	__PACKAGE__->meta()->make_immutable();
 }
+
+__PACKAGE__->meta()->make_immutable();
 
 1;
 
@@ -81,6 +81,11 @@ Mongol - MongoDB ODM for Moose objects
 =head1 METHODS
 
 =head2 map_entities
+
+	Mongol->map_entities( $mongo_connection,
+		'My::Model::Class' => 'db.collection',
+		'My::Model::Other' => 'db.other_collection',
+	);
 
 Using a given MongoDB connection will automatically map a model class to a collection.
 After each initialization if exists the B<setup> method on the model will be called.

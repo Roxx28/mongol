@@ -1,32 +1,32 @@
-package Mongol::Test {
-	use Moose;
-	use Moose::Exporter;
+package Mongol::Test;
 
-	use Test::More;
-	use Test::Moose;
+use Moose;
+use Moose::Exporter;
 
-	use MongoDB;
+use Test::More;
+use Test::Moose;
 
-	Moose::Exporter->setup_import_methods(
-		as_is => [ qw( check_mongod ) ],
-	);
+use MongoDB;
 
-	sub check_mongod {
-		my $mongo = undef;
+Moose::Exporter->setup_import_methods(
+	as_is => [ qw( check_mongod ) ],
+);
 
-		eval {
-			$mongo = MongoDB->connect( $ENV{MONGOL_URL} || 'mongodb://localhost' );
-			$mongo->db( 'test' )
-				->run_command( [ ping => 1 ] );
-		};
+sub check_mongod {
+	my $mongo = undef;
 
-		plan skip_all => 'Cannot connect to mongo!'
-			if( $@ );
+	eval {
+		$mongo = MongoDB->connect( $ENV{MONGOL_URL} || 'mongodb://localhost' );
+		$mongo->db( 'test' )
+			->run_command( [ ping => 1 ] );
+	};
 
-		return $mongo;
-	}
+	plan skip_all => 'Cannot connect to mongo!'
+		if( $@ );
 
-	__PACKAGE__->meta()->make_immutable();
+	return $mongo;
 }
+
+__PACKAGE__->meta()->make_immutable();
 
 1;

@@ -1,19 +1,19 @@
-package Mongol::Roles::Relations {
-	use Moose::Role;
-	use Moose::Util;
+package Mongol::Roles::Relations;
 
-	use Class::Load qw( load_class );
+use Moose::Role;
+use Moose::Util;
 
-	sub has_many {
-		my ( $class, $type, $foreign_key, $config ) = @_;
-	}
+use Class::Load qw( load_class );
 
-	sub has_one {
-		my ( $class, $type, $foreign_key, $config ) = @_;
-	}
-
-	no Moose::Role;
+sub has_many {
+	my ( $class, $type, $foreign_key, $config ) = @_;
 }
+
+sub has_one {
+	my ( $class, $type, $foreign_key, $config ) = @_;
+}
+
+no Moose::Role;
 
 1;
 
@@ -33,7 +33,11 @@ Mongol::Roles::Relations - Automatic relations builder
 
 =head2 has_many
 
+To be implemented.
+
 =head2 has_one
+
+To be implemented.
 
 =head1 SEE ALSO
 
