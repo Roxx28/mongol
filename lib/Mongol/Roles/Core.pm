@@ -50,6 +50,9 @@ sub find_one {
 sub retrieve {
 	my ( $class, $id ) = @_;
 
+	die( 'No identifier provided!' )
+		unless( defined( $id ) );
+
 	return $class->find_one( { _id => $id } );
 }
 
@@ -109,6 +112,9 @@ sub save {
 
 sub remove {
 	my $self = shift();
+
+	die( 'No identifier provided!' )
+		unless( defined( $self->id() ) );
 
 	$self->collection()
 		->delete_one( { _id => $self->id() } );
@@ -220,6 +226,9 @@ Mongol::Roles::Core - Core MongoDB actions and configuration
 
 	my $object = Models::Person->retrieve( $id );
 
+Using the provided C<id> values searches for the document in the collection and
+returns an instance of this model if found or C<undef> otherwise.
+
 =head2 count
 
 	my $count = Models::Person->count( $query, $options );
@@ -227,6 +236,9 @@ Mongol::Roles::Core - Core MongoDB actions and configuration
 =head2 exists
 
 	my $bool = Models::Person->exists( $id );
+
+Checks weather the document with C<id> exists in the collection. Returns a boolean
+value indicating if the document exists or not.
 
 =head2 update
 
@@ -236,21 +248,32 @@ Mongol::Roles::Core - Core MongoDB actions and configuration
 
 	my $count = Models::Person->delete( $query );
 
+Removes documents that match the C<$query> form the associated collection.
+Returns the number of the documents removed or C<undef>.
+
 =head2 save
 
 	$object->save();
+
+Inserts or updates the instance model.
 
 =head2 remove
 
 	$object->remove();
 
+Deletes the current object from the collection using the C<id> property.
+
 =head2 drop
 
 	Models::Person->drop();
 
+Drops the MongoDB collection for this model.
+
 =head2 to_object
 
 	my $object = Models::Person->to_object( $hashref );
+
+Creates a model instance from a hashref document.
 
 =head1 SEE ALSO
 
