@@ -7,10 +7,14 @@ use Class::Load qw( load_class );
 
 sub has_many {
 	my ( $class, $type, $foreign_key, $config ) = @_;
+
+	die( 'Not implemented!' );
 }
 
 sub has_one {
 	my ( $class, $type, $foreign_key, $config ) = @_;
+
+	die( 'Not implemented!' );
 }
 
 no Moose::Role;

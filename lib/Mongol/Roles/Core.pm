@@ -67,10 +67,10 @@ sub exists {
 }
 
 sub update {
-	my ( $class, $filter, $update, $options ) = @_;
+	my ( $class, $query, $update, $options ) = @_;
 
 	my $result = $class->collection()
-		->update_many( $filter, $update, $options );
+		->update_many( $query, $update, $options );
 
 	return $result->acknowledged() ?
 		$result->modified_count() :
@@ -78,10 +78,10 @@ sub update {
 }
 
 sub delete {
-	my ( $class, $filter ) = @_;
+	my ( $class, $query ) = @_;
 
 	my $result = $class->collection()
-		->delete_many( $filter );
+		->delete_many( $query );
 
 	return $result->acknowledged() ?
 		$result->deleted_count() :
@@ -123,7 +123,6 @@ sub drop {
 		->drop();
 }
 
-# --- Private
 sub to_object {
 	my ( $class, $document ) = @_;
 
@@ -146,37 +145,112 @@ Mongol::Roles::Core - Core MongoDB actions and configuration
 
 =head1 SYNOPSIS
 
+	package Models::Person {
+		use Moose;
+
+		extends 'Mongol::Model';
+
+		with 'Mongol::Roles::Core';
+
+		has 'first_name' => (
+			is => 'ro',
+			isa => 'Str',
+			required => 1,
+		);
+
+		has 'last_name' => (
+			is => 'ro',
+			isa => 'Str',
+			required => 1,
+		);
+
+		has 'age' => (
+			is => 'rw',
+			isa => 'Int',
+			default => 0,
+		);
+
+		__PACKAGE__->meta()->make_immutable();
+	}
+
+	...
+
+	my $person = Models::Person->new(
+		{
+			first_name => 'Steve',
+			last_name => 'Rogers',
+		}
+	);
+
+	$person->save();
+	printf( "User id: %s\n", $person->id()->to_string() )
+
+	$person->age( 70 );
+	$person->save();
+
 =head1 DESCRIPTION
 
 =head1 ATTRIBUTES
 
 =head2 collection
 
+	my $collection = Models::Person->collection();
+
+	my $collection = MongoDB->connect(...)
+		->get_namespace( 'db.collection' );
+
+	Models::Person->collection( $collection );
+
 =head2 id
+
+	my $id = $object->id();
+	$object->id( $id );
 
 =head1 METHODS
 
 =head2 find
 
+	my $cursor = Models::Person->find( $query, $options );
+
 =head2 find_one
+
+	my $object = Models::Person->find_one( $query, $options );
 
 =head2 retrieve
 
+	my $object = Models::Person->retrieve( $id );
+
 =head2 count
+
+	my $count = Models::Person->count( $query, $options );
 
 =head2 exists
 
+	my $bool = Models::Person->exists( $id );
+
 =head2 update
+
+	my $count = Models::Person->update( $query, $update, $options );
 
 =head2 delete
 
+	my $count = Models::Person->delete( $query );
+
 =head2 save
+
+	$object->save();
 
 =head2 remove
 
+	$object->remove();
+
 =head2 drop
 
+	Models::Person->drop();
+
 =head2 to_object
+
+	my $object = Models::Person->to_object( $hashref );
 
 =head1 SEE ALSO
 

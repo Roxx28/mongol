@@ -48,9 +48,15 @@ Mongol::Set - Result object for pagination
 
 =head2 items
 
+	my $array_ref = $set->items();
+
 =head2 start
 
+	my $start = $set->start();
+
 =head2 rows
+
+	my $rows = $set->rows();
 
 =head1 SEE ALSO
 

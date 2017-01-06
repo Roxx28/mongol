@@ -55,6 +55,8 @@ Mongol::Roles::Pagination - Pagination for Mongol models
 
 =head2 paginate
 
+	my $set = Models::Person->paginate( { first_name => 'John' }, 0, 10, {} );
+
 =head1 SEE ALSO
 
 =over 4

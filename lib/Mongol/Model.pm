@@ -77,15 +77,53 @@ Mongol::Model - Everything is a model
 		__PACKAGE__->meta()->make_immutable();
 	}
 
+	package main {
+		use strict;
+		use warnings;
+
+		use Model::Person;
+
+		my $person => Model::Person->new(
+			{
+				first_name => 'Peter',
+				last_name => 'Parker',
+			}
+		);
+
+		my $hashref = $person->pack();
+		my $clone = Model::Person->unpack( $hashref );
+
+		my $nice_hashref = $person->serialize();
+	}
+
 =head1 DESCRIPTION
+
+In Mongol there's no need to defined your model classes as document or subdocument 
+it knows automatically to diferentiate between them. Everything should be a model,
+if you're planning to store that information in the database then make sure your
+class inherits from this package. Right now all it does it takes care of the data
+serialization for you and it makes sure that some of the datatypes are converted correctly.
 
 =head1 METHODS
 
 =head2 pack
 
+	my $hashref = $model->pack();
+
+Inherited from L<MooseX::Storage>.
+
 =head2 unpack
 
+	my $model = Model::Class->unpack( $hashref );
+
+Inherited from L<MooseX::Storage>.
+
 =head2 serialize
+
+	my $hashref = $model->serialize();
+
+Just like B<pack> except it drops the B<__CLASS__> field from the resulting
+hash reference.
 
 =head1 SEE ALSO
 
