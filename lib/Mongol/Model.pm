@@ -41,7 +41,11 @@ around 'pack' => sub {
 	return $result;
 };
 
-sub serialize { shift()->pack( no_class => 1 ) }
+sub serialize {
+	my $self = shift();
+
+	return $self->pack( no_class => 1 );
+}
 
 __PACKAGE__->meta()->make_immutable();
 
@@ -98,7 +102,7 @@ Mongol::Model - Everything is a model
 
 =head1 DESCRIPTION
 
-In Mongol there's no need to defined your model classes as document or subdocument 
+In Mongol there's no need to defined your model classes as document or subdocument
 it knows automatically to diferentiate between them. Everything should be a model,
 if you're planning to store that information in the database then make sure your
 class inherits from this package. Right now all it does it takes care of the data

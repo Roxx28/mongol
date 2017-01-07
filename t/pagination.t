@@ -43,18 +43,18 @@ foreach my $index ( 1 .. 50 ) {
 	$item->save();
 }
 
-my $collection = Mongol::Models::Person->paginate( { age => 0 }, 5, 3 );
-isa_ok( $collection, 'Mongol::Set' );
-isa_ok( $collection, 'Mongol::Model' );
-can_ok( $collection, qw( items start rows ) );
+my $page = Mongol::Models::Person->paginate( { age => 0 }, 5, 3 );
+isa_ok( $page, 'Mongol::Models::Page' );
+isa_ok( $page, 'Mongol::Model' );
+can_ok( $page, qw( items start rows ) );
 
-is( $collection->total(), 10, 'Count ok' );
-is( $collection->start(), 5, 'Start ok' );
-is( $collection->rows(), 3, 'Rows ok' );
+is( $page->total(), 10, 'Count ok' );
+is( $page->start(), 5, 'Start ok' );
+is( $page->rows(), 3, 'Rows ok' );
 
 my $data = [
 	map { $_->id() }
-		@{ $collection->items() }
+		@{ $page->items() }
 ];
 is_deeply( $data, [ 30, 35, 40 ], 'Data ok' );
 

@@ -2,7 +2,7 @@ package Mongol::Roles::Pagination;
 
 use Moose::Role;
 
-use Mongol::Set;
+use Mongol::Models::Page;
 
 use constant {
 	PAGINATION_DEFAULT_START => 0,
@@ -23,7 +23,7 @@ sub paginate {
 	my @items = $class->find( $query, $options )
 		->all();
 
-	my $collection = Mongol::Set->new(
+	my $page = Mongol::Models::Page->new(
 		{
 			items => \@items,
 			total => $total,
@@ -32,7 +32,7 @@ sub paginate {
 		}
 	);
 
-	return $collection;
+	return $page;
 }
 
 no Moose::Role;
@@ -49,13 +49,23 @@ Mongol::Roles::Pagination - Pagination for Mongol models
 
 =head1 SYNOPSIS
 
+	use POSIX qw( ceil );
+	use Data::Dumper;
+
+	my $page = Models::Person->paginate( { age => { '$gt' => 25 } }, 0, 10 );
+
+	my $total_pages = ceil( $page->total() / $page->rows() );
+	my $current_page = ( $page->start() / $page->rows() ) + 1;
+
+	printf( "%s", Dumper( $page->serialize() ) );
+
 =head1 DESCRIPTION
 
 =head1 METHODS
 
 =head2 paginate
 
-	my $set = Models::Person->paginate( { first_name => 'John' }, 0, 10, {} );
+	my $page = Models::Person->paginate( { first_name => 'John' }, 0, 10, {} );
 
 =head1 SEE ALSO
 
@@ -63,7 +73,7 @@ Mongol::Roles::Pagination - Pagination for Mongol models
 
 =item *
 
-L<Mongol::Set>
+L<Mongol::Models::Page>
 
 =back
 

@@ -196,6 +196,9 @@ Mongol::Roles::Core - Core MongoDB actions and configuration
 
 =head1 DESCRIPTION
 
+Mongol core functionality, this takes care of all the basic actions. This role should
+be applied to master models.
+
 =head1 ATTRIBUTES
 
 =head2 collection

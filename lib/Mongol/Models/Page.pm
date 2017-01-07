@@ -1,4 +1,4 @@
-package Mongol::Set;
+package Mongol::Models::Page;
 
 use Moose;
 
@@ -38,9 +38,16 @@ __END__
 
 =head1 NAME
 
-Mongol::Set - Result object for pagination
+Mongol::Models::Page - Result object for pagination
 
 =head1 SYNOPSIS
+
+	use POSIX qw( ceil );
+
+	my $page = Models::Person->paginate( { age => { '$gt' => 25 } }, 0, 10 );
+
+	my $total_pages = ceil( $page->total() / $page->rows() );
+	my $current_page = ( $page->start() / $page->rows() ) + 1;
 
 =head1 DESCRIPTION
 
@@ -48,15 +55,15 @@ Mongol::Set - Result object for pagination
 
 =head2 items
 
-	my $array_ref = $set->items();
+	my $array_ref = $page->items();
 
 =head2 start
 
-	my $start = $set->start();
+	my $start = $page->start();
 
 =head2 rows
 
-	my $rows = $set->rows();
+	my $rows = $page->rows();
 
 =head1 SEE ALSO
 

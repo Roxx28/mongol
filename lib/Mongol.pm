@@ -10,8 +10,8 @@ our $VERSION = '2.0';
 sub map_entities {
 	my ( $class, $connection, %entities ) = @_;
 
-	while( my ( $package, $namespace ) = each( %entities ) ) {
-		load_class( $package );
+	while( my ( $name, $namespace ) = each( %entities ) ) {
+		my $package = load_class( $name );
 
 		if( does_role( $package, 'Mongol::Roles::Core' ) ) {
 			$package->collection( $connection->get_namespace( $namespace ) );
