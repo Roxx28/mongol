@@ -9,7 +9,7 @@ my $builder = Module::Build->new(
 	module_name => 'Mongol',
 
 	dist_author => 'Tudor Marghidanu',
-	dist_abstract => 'Perl Mongo wrapper for Moose objects',
+	dist_abstract => 'Perl MongoDB wrapper for Moose objects',
 
 	meta_merge => {
 		resources => {

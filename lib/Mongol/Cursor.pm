@@ -1,44 +1,44 @@
-package Mongol::Cursor {
-	use Moose;
+package Mongol::Cursor;
 
-	has '_result' => (
-		is => 'ro',
-		isa => 'MongoDB::QueryResult',
-		required => 1,
-	);
+use Moose;
 
-	has '_class' => (
-		is => 'ro',
-		isa => 'Str',
-		required => 1,
-	);
+has 'result' => (
+	is => 'ro',
+	isa => 'MongoDB::QueryResult',
+	required => 1,
+);
 
-	sub all {
-		my $self = shift();
+has 'type' => (
+	is => 'ro',
+	isa => 'Str',
+	required => 1,
+);
 
-		return map { $self->_class()->_map_to_object( $_ ) }
-			$self->_result()->all();
-	}
+sub all {
+	my $self = shift();
 
-	sub has_next {
-		my $self = shift();
-
-		return $self->_result()
-			->has_next()
-	}
-
-	sub next {
-		my $self = shift();
-
-		my $document = $self->_result()
-			->next();
-
-		return defined( $document ) ?
-			$self->_class()->_map_to_object( $document ) : undef;
-	}
-
-	__PACKAGE__->meta()->make_immutable();
+	return map { $self->type()->to_object( $_ ) }
+		$self->result()->all();
 }
+
+sub has_next {
+	my $self = shift();
+
+	return $self->_result()
+		->has_next()
+}
+
+sub next {
+	my $self = shift();
+
+	my $document = $self->result()
+		->next();
+
+	return defined( $document ) ?
+		$self->type()->to_object( $document ) : undef;
+}
+
+__PACKAGE__->meta()->make_immutable();
 
 1;
 
@@ -48,41 +48,26 @@ __END__
 
 =head1 NAME
 
-Mongol::Cursor - Entity cursor
+Mongol::Cursor - Mongol cursor
 
 =head1 SYNOPSIS
 
-	package Person {
-		use Moose;
-
-		extends 'Mongol::Base';
-
-		with 'Mongol::Entity';
-
-		has 'name' => (
-			is => 'ro',
-			isa => 'Str',
-			required => 1,
-		);
-
-		has 'age' => (
-			is => 'ro',
-			isa => 'Int',
-			required => 1,
-		);
-
-		__PACKAGE__->meta()->make_immutable();
-	}
-
-	my $cursor = Person->find( { age => { '$lt' => 30 } } );
-	while( ( my $person = $cursor->next() ) ) {
-		printf( "Name: %s\n", $person->name() );
-		printf( "Age: %d\n", $person->age() );
-	}
-
-	my @people = $cursor->all();
-
 =head1 DESCRIPTION
+
+=head1 ATTRIBUTES
+
+=head2 type
+
+	my $type = $cursor->type()
+
+The class type associated for this cursor. All documents retrieved with this cursor
+will be automatically deserialized using this class definition.
+
+=head2 result
+
+	my $result = $cursor->result();
+
+The original L<MongoDB::QueryResult> on which this cursor wraps.
 
 =head1 METHODS
 
@@ -90,20 +75,19 @@ Mongol::Cursor - Entity cursor
 
 	my @objects = $cursor->all();
 
-Returns an array of entities.
+Returns all the cursor result as an array of objects.
 
 =head2 has_next
 
 	my $bool = $cursor->has_next();
 
-Checks if there are any more objects in the cursor.
+Checks if there are any objects in the cursor.
 
 =head2 next
 
 	my $object = $cursor->next();
 
-Returns the next entity in the cursor. If the cursor has no more values B<undef>
-will be returned.
+Returns the next object in the cursor.
 
 =head1 SEE ALSO
 
