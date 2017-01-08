@@ -5,7 +5,7 @@ use Moose::Util qw( does_role );
 
 use Class::Load qw( load_class );
 
-our $VERSION = '2.0';
+our $VERSION = '2.1';
 
 sub map_entities {
 	my ( $class, $connection, %entities ) = @_;
