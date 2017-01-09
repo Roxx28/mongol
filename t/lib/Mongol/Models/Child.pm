@@ -9,7 +9,7 @@ with 'Mongol::Roles::Relations';
 
 has 'parent_id' => (
 	is => 'ro',
-	isa => 'MongoDB::OID',
+	isa => 'Maybe[MongoDB::OID]',
 	required => 1,
 );
 
@@ -19,6 +19,18 @@ has 'name' => (
 	required => 1,
 );
 
+sub setup {
+	my $class = shift();
+
+	$class->collection()
+		->indexes()
+		->create_one( [ parent_id => 1 ] );
+}
+
+__PACKAGE__->has_one( 'Mongol::Models::Parent', 'parent_id', 'parent' );
+
 __PACKAGE__->meta()->make_immutable();
 
 1;
+
+__END__

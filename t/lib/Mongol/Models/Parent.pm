@@ -13,10 +13,10 @@ has 'name' => (
 	required => 1,
 );
 
-__PACKAGE__->has_many(
-	'Mongol::Models::Child' => 'parent_id'
-);
+__PACKAGE__->has_many( 'Mongol::Models::Child', 'parent_id', 'child' );
 
 __PACKAGE__->meta()->make_immutable();
 
 1;
+
+__END__
