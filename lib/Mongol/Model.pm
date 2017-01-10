@@ -7,27 +7,19 @@ use MooseX::Storage::Engine;
 
 with Storage( base => 'SerializedClass' );
 
-# TODO: Maybe a foreach would work here ...
-MooseX::Storage::Engine->add_custom_type_handler(
-	'MongoDB::OID' => (
-		expand => sub { shift() },
-		collapse => sub { shift() },
-	)
+my @MAPPED_CLASSES = qw(
+	MongoDB::OID
+	MongoDB::DBRef
+	MongoDB::BSON::Binary
+	DateTime
 );
 
 MooseX::Storage::Engine->add_custom_type_handler(
-	'MongoDB::DBRef' => (
+	$_ => (
 		expand => sub { shift() },
 		collapse => sub { shift() },
 	)
-);
-
-MooseX::Storage::Engine->add_custom_type_handler(
-	'DateTime' => (
-		expand => sub { shift() },
-		collapse => sub { shift() },
-	)
-);
+) foreach ( @MAPPED_CLASSES );
 
 around 'pack' => sub {
 	my $orig = shift();
