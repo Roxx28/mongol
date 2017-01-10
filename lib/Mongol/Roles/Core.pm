@@ -6,6 +6,8 @@ use MooseX::ClassAttribute;
 
 use Mongol::Cursor;
 
+use Scalar::Util qw( blessed );
+
 requires 'pack';
 requires 'unpack';
 
@@ -24,6 +26,9 @@ has 'id' => (
 sub find {
 	my ( $class, $query, $options ) = @_;
 
+	die( 'No collection defined!' )
+		unless( defined( $class->collection() ) );
+
 	my $result = $class->collection()
 		->find( $query, $options )
 		->result();
@@ -38,6 +43,9 @@ sub find {
 
 sub find_one {
 	my ( $class, $query, $options ) = @_;
+
+	die( 'No collection defined!' )
+		unless( defined( $class->collection() ) );
 
 	my $document = $class->collection()
 		->find_one( $query, {}, $options );
@@ -59,6 +67,9 @@ sub retrieve {
 sub count {
 	my ( $class, $query, $options ) = @_;
 
+	die( 'No collection defined!' )
+		unless( defined( $class->collection() ) );
+
 	return $class->collection()
 		->count( $query, $options );
 }
@@ -72,6 +83,9 @@ sub exists {
 sub update {
 	my ( $class, $query, $update, $options ) = @_;
 
+	die( 'No collection defined!' )
+		unless( defined( $class->collection() ) );
+
 	my $result = $class->collection()
 		->update_many( $query, $update, $options );
 
@@ -83,6 +97,9 @@ sub update {
 sub delete {
 	my ( $class, $query ) = @_;
 
+	die( 'No collection defined!' )
+		unless( defined( $class->collection() ) );
+
 	my $result = $class->collection()
 		->delete_many( $query );
 
@@ -93,17 +110,21 @@ sub delete {
 
 sub save {
 	my $self = shift();
+	my $class = blessed( $self );
+
+	die( 'No collection defined!' )
+		unless( defined( $class->collection() ) );
 
 	my $document = $self->pack();
 	$document->{_id} = delete( $document->{id} );
 
 	unless( defined( $document->{_id} ) ) {
-		my $result = $self->collection()
+		my $result = $class->collection()
 			->insert_one( $document );
 
 		$self->id( $result->inserted_id() );
 	} else {
-		$self->collection()
+		$class->collection()
 			->replace_one( { _id => $self->id() }, $document, { upsert => 1 } );
 	}
 
@@ -112,20 +133,27 @@ sub save {
 
 sub remove {
 	my $self = shift();
+	my $class = blessed( $self );
+
+	die( 'No collection defined!' )
+		unless( defined( $class->collection() ) );
 
 	die( 'No identifier provided!' )
 		unless( defined( $self->id() ) );
 
-	$self->collection()
+	$class->collection()
 		->delete_one( { _id => $self->id() } );
 
 	return $self;
 }
 
 sub drop {
-	my $self = shift();
+	my $class = shift();
 
-	$self->collection()
+	die( 'No collection defined!' )
+		unless( defined( $class->collection() ) );
+
+	$class->collection()
 		->drop();
 }
 

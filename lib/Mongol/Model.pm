@@ -7,6 +7,7 @@ use MooseX::Storage::Engine;
 
 with Storage( base => 'SerializedClass' );
 
+# TODO: Maybe a foreach would work here ...
 MooseX::Storage::Engine->add_custom_type_handler(
 	'MongoDB::OID' => (
 		expand => sub { shift() },
