@@ -27,7 +27,7 @@ sub setup {
 		->create_one( [ parent_id => 1 ] );
 }
 
-__PACKAGE__->has_one( 'Mongol::Models::Parent', 'parent_id', 'parent' );
+__PACKAGE__->has_one( 'Mongol::Models::Parent' => 'parent_id' );
 
 __PACKAGE__->meta()->make_immutable();
 

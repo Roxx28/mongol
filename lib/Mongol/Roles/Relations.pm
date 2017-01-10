@@ -22,7 +22,7 @@ sub has_many {
 	die( 'No foreign key defined!' )
 		unless( $foreign_key );
 
-	die( 'No moniker defined!' )
+	$moniker = _get_moniker( $type )
 		unless( $moniker );
 
 	load_class( $type );
@@ -71,7 +71,7 @@ sub has_one {
 	die( 'No foreign key defined!' )
 		unless( $foreign_key );
 
-	die( 'No moniker defined!' )
+	$moniker = _get_moniker( $type )
 		unless( $moniker );
 
 	load_class( $type );
@@ -84,6 +84,13 @@ sub has_one {
 			return $type->retrieve( $self->$foreign_key() );
 		}
 	);
+}
+
+sub _get_moniker {
+	my $type = shift();
+
+	( my $name = $type ) =~ s/.+:://;
+	return lc( $name );
 }
 
 no Moose::Role;
