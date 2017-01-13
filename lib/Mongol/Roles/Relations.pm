@@ -29,6 +29,16 @@ sub has_many {
 	die( sprintf( '%s cannot do basic operations!', $type ) )
 		unless( does_role( $type, 'Mongol::Roles::Core' ) );
 
+	$class->meta()->add_method( sprintf( 'add_%s', $moniker ) => sub {
+			my ( $self, $data, $options ) = @_;
+
+			$data->{ $foreign_key } = $self->id();
+
+			return $type->new( $data )
+				->save();
+		}
+	);
+
 	$class->meta()->add_method( sprintf( 'get_%s', PL( $moniker ) ) => sub {
 			my ( $self, $query, $options ) = @_;
 

@@ -66,12 +66,12 @@ Somewhere in the L<Mojolicious> world...
 
 		extends 'Mongol::Model';
 
-		use UUID qw( uuid );
+		use Data::UUID;
 
 		with 'Mongol::Roles::Core';
 
 		has '+id' => (
-			default => sub { uuid() },
+			default => sub { Data::UUID->new()->create_b64() },
 		);
 
 		has 'username' => (

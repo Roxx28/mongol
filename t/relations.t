@@ -32,28 +32,23 @@ isa_ok( $parent, 'Mongol::Model' );
 does_ok( $parent, 'Mongol::Roles::Core' );
 does_ok( $parent, 'Mongol::Roles::Relations' );
 
-can_ok( $parent, qw( save get_children get_child remove_children ) );
+can_ok( $parent, qw( save add_child get_children get_child remove_children ) );
 $parent->save();
 
-foreach my $index ( 1 .. 10 ) {
-	my $child = Mongol::Models::Child->new(
-		{
-			id => $index,
-			parent_id => ( $index % 2 ) ? $parent->id() : undef,
-			name => sprintf( 'Child %d', $index ),
-		}
-	);
-
-	$child->save();
-}
+$parent->add_child(
+	{
+		id => $_,
+		name => sprintf( 'Child %d', $_ ),
+	}
+) foreach ( 1 .. 10 );
 
 my @children = $parent->get_children()
 	->all();
 
-is( scalar( @children ), 5, 'Count ok' );
+is( scalar( @children ), 10, 'Count ok' );
 is_deeply(
 	[ map { $_->id() } @children ],
-	[ 1, 3, 5, 7, 9 ],
+	[ 1 .. 10 ],
 	'Ids match!'
 );
 
