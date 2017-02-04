@@ -20,8 +20,10 @@ class_has 'collection' => (
 has 'id' => (
 	is => 'rw',
 	isa => 'Maybe[MongoDB::OID|Str|Num]',
-	default => undef,
+	lazy_build => 1,
 );
+
+sub _build_id { undef }
 
 sub find {
 	my ( $class, $query, $options ) = @_;

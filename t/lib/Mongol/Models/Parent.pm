@@ -6,6 +6,7 @@ extends 'Mongol::Model';
 
 with 'Mongol::Roles::Core';
 with 'Mongol::Roles::Relations';
+with 'Mongol::Roles::UUID';
 
 has 'name' => (
 	is => 'ro',

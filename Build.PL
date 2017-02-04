@@ -26,6 +26,7 @@ my $builder = Module::Build->new(
 	# NOTE: Keep list sorted!
 	requires => {
 		'Class::Load' => undef,
+		'Data::UUID' => undef,
 		'Lingua::EN::Inflect' => undef,
 		'MongoDB' => undef,
 		'Moose' => undef,

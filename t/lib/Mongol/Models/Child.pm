@@ -9,7 +9,7 @@ with 'Mongol::Roles::Relations';
 
 has 'parent_id' => (
 	is => 'ro',
-	isa => 'Maybe[MongoDB::OID]',
+	isa => 'Str',
 	required => 1,
 );
 
